@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quicksort Simulator</title>
     <style>
-        body {
+         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
@@ -111,19 +111,21 @@ img{
     </div>
     <div class="container">
         <input type="text" id="inputArray" placeholder="Digite os números separados por vírgula">
-        <button onclick="simulateQuicksort()">Simular</button>
+        <button onclick="simulateQuicksort()">Ordenar</button>
+        <button onclick="resetInput()">Resetar</button> <!-- Botão de reset -->
     </div>
     <div class="result">
         <h2>Vetor ordenado:</h2>
         <div id="outputArray" class="outputArray"></div>
+        <h3 id="sortingTime">Tempo de ordenação: </h3> <!-- Adicionado elemento para exibir tempo de ordenação -->
     </div>
 
     <div class="footer">
-        Developed by Carlos Eduardo and Donny Bruno
+        Desenvolvido por Carlos Eduardo e Donny Bruno
     </div>
 
     <script>
-        async function quicksort(arr, low, high) {
+           async function quicksort(arr, low, high) {
             if (low < high) {
                 let pi = await partition(arr, low, high);
 
@@ -171,7 +173,7 @@ img{
                     items[j].classList.remove("highlight");
 
                     resolve();
-                }, 500);
+                }, 1000);
             });
         }
 
@@ -186,10 +188,20 @@ img{
                 outputArray.appendChild(arrayItem);
             });
 
+            let startTime = performance.now(); // Inicia a contagem do tempo
             await quicksort(inputArray, 0, inputArray.length - 1);
-        }
-    </script>
+            let endTime = performance.now(); // Finaliza a contagem do tempo
 
+            let sortingTime = (endTime - startTime).toFixed(2); // Calcula a diferença e arredonda para 2 casas decimais
+            document.getElementById("sortingTime").innerText = "Tempo de ordenação: " + sortingTime + "ms"; // Exibe o tempo de ordenação
+        }
+        function resetInput() {
+        document.getElementById("inputArray").value = ""; // Limpa o campo de input
+        document.getElementById("outputArray").innerHTML = ""; // Limpa a div .outputArray
+        document.getElementById("sortingTime").innerText = "Tempo de ordenação: "; // Limpa o tempo de ordenação
+    }
+    </script>
 
 </body>
 </html>
+
