@@ -1,0 +1,195 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quicksort Simulator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #f8f8f8;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #4CAF50;
+            position: relative;
+        }
+
+        .logo {
+            max-width: 150px;
+        }
+
+        h1 {
+            margin: 0;
+            color: white;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+input {
+    padding: 10px;
+    width: 300px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    padding: 10px;
+    margin-left: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+.result {
+    text-align: center;
+    padding: 20px;
+}
+
+.outputArray {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
+.arrayItem {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    padding: 8px 16px;
+    margin: 5px;
+    border-radius: 5px;
+    white-space: nowrap;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos adicionados para a animação */
+.highlight {
+    background-color: #ffeb3b;
+}
+
+.pivot {
+    background-color: #ff9800;
+}
+img{
+    height: 90px;
+}
+.footer {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            margin-top: auto;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="https://ifce.edu.br/aracati/menu/dg/comunicacao/imagens/LOGOIFARACATIVERTICALBRANCA.png" alt="Logo" class="logo">
+        <h1>Algoritmo Quicksort</h1>
+    </div>
+    <div class="container">
+        <input type="text" id="inputArray" placeholder="Digite os números separados por vírgula">
+        <button onclick="simulateQuicksort()">Simular</button>
+    </div>
+    <div class="result">
+        <h2>Vetor ordenado:</h2>
+        <div id="outputArray" class="outputArray"></div>
+    </div>
+
+    <div class="footer">
+        Developed by Carlos Eduardo and Donny Bruno
+    </div>
+
+    <script>
+        async function quicksort(arr, low, high) {
+            if (low < high) {
+                let pi = await partition(arr, low, high);
+
+                await quicksort(arr, low, pi - 1);
+                await quicksort(arr, pi + 1, high);
+            }
+        }
+
+        async function partition(arr, low, high) {
+            let pivot = arr[high];
+            let i = (low - 1);
+
+            let outputArray = document.getElementById("outputArray");
+            let items = outputArray.getElementsByClassName("arrayItem");
+            items[high].classList.add("pivot");
+
+            for (let j = low; j <= high - 1; j++) {
+                if (arr[j] < pivot) {
+                    i++;
+                    [arr[i], arr[j]] = [arr[j], arr[i]];
+                    await animateSwap(i, j);
+                }
+            }
+
+            [arr[i + 1], arr[high]] = [arr[high], arr[i + 1]];
+            await animateSwap(i + 1, high);
+
+            items[high].classList.remove("pivot");
+            return (i + 1);
+        }
+
+        function animateSwap(i, j) {
+            return new Promise(resolve => {
+                let outputArray = document.getElementById("outputArray");
+                let items = outputArray.getElementsByClassName("arrayItem");
+                items[i].classList.add("highlight");
+                items[j].classList.add("highlight");
+
+                setTimeout(() => {
+                    let temp = items[i].innerText;
+                    items[i].innerText = items[j].innerText;
+                    items[j].innerText = temp;
+
+                    items[i].classList.remove("highlight");
+                    items[j].classList.remove("highlight");
+
+                    resolve();
+                }, 500);
+            });
+        }
+
+        async function simulateQuicksort() {
+            let inputArray = document.getElementById("inputArray").value.split(",").map(Number);
+            let outputArray = document.getElementById("outputArray");
+            outputArray.innerHTML = '';
+            inputArray.forEach(function (item) {
+                let arrayItem = document.createElement('div');
+                arrayItem.className = 'arrayItem';
+                arrayItem.innerText = item;
+                outputArray.appendChild(arrayItem);
+            });
+
+            await quicksort(inputArray, 0, inputArray.length - 1);
+        }
+    </script>
+
+
+</body>
+</html>
