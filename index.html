@@ -19,6 +19,13 @@
             align-items: center;
             padding: 20px;
             background-color: #4CAF50;
+            position: relative; 
+        }
+
+        .header-right {
+            position: absolute; /* Adicionado */
+            top: 20px; /* Adicionado */
+            right: 20px; /* Adicionado */
         }
 
         .logo {
@@ -106,7 +113,15 @@ img{
 <body>
     <div class="header">
         <img src="https://ifce.edu.br/aracati/menu/dg/comunicacao/imagens/LOGOIFARACATIVERTICALBRANCA.png" alt="Logo" class="logo">
-        <h1>Algoritmo Quicksort</h1>
+        <h1 data-translate-key="pageTitle">Algoritmo Quicksort</h1>
+        <div class="header-right">
+            <select id="languageSelect" onchange="changeLanguage()">
+                <option value="en">English</option>
+                <option value="es">Español</option>
+                <option value="pt">Português</option>
+                <option value="fr">Français</option>
+            </select>
+        </div>
     </div>
     <div class="container">
         <input type="text" id="inputArray" placeholder="Digite os números separados por vírgula">
@@ -124,6 +139,38 @@ img{
     </div>
 
     <script>
+
+
+const translations = {
+            en: {
+                pageTitle: "Quicksort Algorithm",
+                // Adicione mais traduções em inglês aqui
+            },
+            es: {
+                pageTitle: "Algoritmo Quicksort",
+                // Adicione mais traduções em espanhol aqui
+            },
+            pt: {
+                pageTitle: "Algoritmo Quicksort",
+                // Adicione mais traduções em português aqui
+            },
+            fr: {
+                pageTitle: "Algorithme Quicksort",
+                // Adicione mais traduções em francês aqui
+            }
+        };
+
+        function changeLanguage() {
+            const language = document.getElementById("languageSelect").value;
+            const elementsToTranslate = document.querySelectorAll("[data-translate-key]");
+
+            elementsToTranslate.forEach(element => {
+                const translationKey = element.getAttribute("data-translate-key");
+                if (translations[language] && translations[language][translationKey]) {
+                    element.innerText = translations[language][translationKey];
+                }
+            });
+        }
            async function quicksort(arr, low, high) {
             if (low < high) {
                 let pi = await partition(arr, low, high);
